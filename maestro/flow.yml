@@ -1,0 +1,4 @@
+appId: nl.dirkpostma.moviesearch
+---
+- launchApp
+- assertVisible: "Movie Search App"
