@@ -1,20 +1,12 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
-import { store } from './core/store/store';
+import {store} from './core/store/store';
 import {Provider} from 'react-redux';
-import { Counter } from './features/counter/counter';
+import {SearchMovieScreen} from './features/search-movie/search-movie-screen';
 
 export const App = () => {
   return (
     <Provider store={store}>
-      <SafeAreaView>
-        <ScrollView>
-          <View>
-            <Text>Movie Search App</Text>
-            <Counter />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+      <SearchMovieScreen />
     </Provider>
   );
 };
