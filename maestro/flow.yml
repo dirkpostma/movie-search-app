@@ -1,4 +1,8 @@
 appId: nl.dirkpostma.moviesearch
 ---
 - launchApp
-- assertVisible: "Movie Search App"
+- assertVisible: "Search movies..."
+- tapOn: "Search movies..."
+- inputText: "a beautiful mind"
+- assertVisible: "#453 - a beautiful mind"
+
