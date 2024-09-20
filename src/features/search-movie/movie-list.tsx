@@ -1,17 +1,13 @@
 import {FlashList} from '@shopify/flash-list';
 import React from 'react';
-import {Text, ActivityIndicator} from 'react-native';
+import {Text} from 'react-native';
+import {Movie} from '../../core/api/types';
 
-interface Movie {
-  id: number;
-  title: string;
-}
-
-interface Props {
+type Props = {
   movies: Movie[];
   isLoadingMore: boolean;
   onLoadMore: () => void;
-}
+};
 
 const MovieListItem = ({item}: {item: Movie}) => (
   <Text key={item.id}>
@@ -28,9 +24,7 @@ export const MovieList = ({movies, isLoadingMore, onLoadMore}: Props) => {
       estimatedItemSize={50}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
-      ListFooterComponent={
-        isLoadingMore ? <ActivityIndicator size="small" /> : null
-      }
+      ListFooterComponent={isLoadingMore ? <Text>Loading more...</Text> : null}
     />
   );
 };

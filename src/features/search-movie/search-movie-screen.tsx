@@ -3,15 +3,8 @@ import {SearchMovie} from './search-movie';
 import {useSearchMoviesInfiniteQuery} from './use-search-movies-infinite-query';
 
 export const SearchMovieScreen = () => {
-  const {
-    query,
-    setQuery,
-    movies,
-    isLoading,
-    isFetching,
-    error,
-    loadMore,
-  } = useSearchMoviesInfiniteQuery();
+  const {query, setQuery, movies, isLoading, isFetching, error, loadMore} =
+    useSearchMoviesInfiniteQuery();
 
   return (
     <SearchMovie

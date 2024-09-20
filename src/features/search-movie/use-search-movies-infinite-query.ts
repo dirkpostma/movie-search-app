@@ -17,7 +17,7 @@ export function useSearchMoviesInfiniteQuery() {
     page: 1,
     pages: [],
   });
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasMore, setHasMore] = useState<boolean>(false);
 
   const [trigger, {data, error, isLoading, isFetching}] =
     useLazyGetSearchMoviesQuery();

@@ -49,9 +49,11 @@ export const SearchMovie = ({
       />
 
       {isLoading ? (
-        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
       ) : error ? (
         <Text>Error loading movies</Text>
+      ) : !isLoadingMore && query && movies.length === 0 ? (
+        <Text>No movies found</Text>
       ) : (
         <MovieList
           movies={movies}
