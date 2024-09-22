@@ -8,12 +8,12 @@ import {
 } from '@testing-library/react-native';
 
 import {Provider} from 'react-redux';
-import {SearchMovieScreen} from './search-movie-screen';
 import {store} from '../../core/store/store';
 
 import {setupServer} from 'msw/node';
 import {http, HttpResponse} from 'msw';
 import {movieApi} from '../../core/api/movie-api';
+import {SearchMoviePage} from './search-movie-page';
 
 const movies = [
   {id: 1, title: 'The Matrix'},
@@ -68,7 +68,7 @@ afterAll(() => server.close());
 const TestComponent = () => {
   return (
     <Provider store={store}>
-      <SearchMovieScreen />
+      <SearchMoviePage onPressItem={jest.fn()} />
     </Provider>
   );
 };

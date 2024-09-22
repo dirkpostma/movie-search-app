@@ -1,20 +1,17 @@
 import React from 'react';
-import {SearchMovie} from '../../core/ui/templates/search-movie';
-import {useSearchMoviesInfiniteQuery} from './use-search-movies-infinite-query';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from '../../core/navigation/main-navigator';
+import {SearchMoviePage} from './search-movie-page';
+import {Screen} from '../../core/ui/atoms/screen';
 
-export const SearchMovieScreen = () => {
-  const {query, setQuery, movies, isLoading, isFetching, error, loadMore} =
-    useSearchMoviesInfiniteQuery();
+type Props = NativeStackScreenProps<RootStackParamList, 'SearchMovieScreen'>;
 
+export const SearchMovieScreen = ({navigation}: Props) => {
   return (
-    <SearchMovie
-      query={query}
-      setQuery={setQuery}
-      movies={movies}
-      isLoading={isLoading}
-      isLoadingMore={isFetching}
-      error={!!error}
-      onLoadMore={loadMore}
-    />
+    <Screen>
+      <SearchMoviePage
+        onPressItem={id => navigation.navigate('MovieDetailsScreen', {id})}
+      />
+    </Screen>
   );
 };

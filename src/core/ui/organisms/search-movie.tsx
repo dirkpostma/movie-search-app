@@ -1,6 +1,5 @@
 import React from 'react';
 import {Movie} from '../../api/types';
-import {Screen} from '../atoms/screen';
 import {SearchMovieTextInput} from '../molecules/search-movie-text-input';
 import {SearchMovieResults} from '../molecules/search-movie-results';
 
@@ -12,6 +11,7 @@ type Props = {
   isLoadingMore: boolean;
   error: boolean;
   onLoadMore: () => void;
+  onPressItem: (id: number) => void;
 };
 
 export const SearchMovie = ({
@@ -22,9 +22,10 @@ export const SearchMovie = ({
   isLoadingMore,
   error,
   onLoadMore,
+  onPressItem,
 }: Props) => {
   return (
-    <Screen>
+    <>
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
       <SearchMovieResults
         movies={movies}
@@ -33,7 +34,8 @@ export const SearchMovie = ({
         error={error}
         query={query}
         onLoadMore={onLoadMore}
+        onPressItem={onPressItem}
       />
-    </Screen>
+    </>
   );
 };

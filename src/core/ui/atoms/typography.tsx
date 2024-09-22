@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   paragraph: {
     fontSize: 14,
-    marginBottom: spacing.s,
+    marginBottom: spacing.m,
     color: '#666',
   },
 });

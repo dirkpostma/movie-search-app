@@ -17,7 +17,11 @@ export const movieApi = createApi({
       query: ({query, page}) =>
         `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
     }),
+    getMovieById: builder.query<Movie, { id: number }>({
+      query: ({id}) =>
+        `/movie/${id}?api_key=${env.TMDB_API_KEY}`,
+    }),
   }),
 });
 
-export const {useLazyGetSearchMoviesQuery} = movieApi;
+export const {useLazyGetSearchMoviesQuery, useGetMovieByIdQuery} = movieApi;

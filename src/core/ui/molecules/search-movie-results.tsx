@@ -1,5 +1,5 @@
 import React from 'react';
-import {MovieList} from '../organisms/movie-list';
+import {MovieList} from './movie-list';
 import {P} from '../atoms/typography';
 import {Movie} from '../../api/types';
 
@@ -10,6 +10,7 @@ type Props = {
   error: boolean;
   query: string;
   onLoadMore: () => void;
+  onPressItem: (id: number) => void;
 };
 
 export const SearchMovieResults = ({
@@ -19,6 +20,7 @@ export const SearchMovieResults = ({
   error,
   query,
   onLoadMore,
+  onPressItem,
 }: Props) => {
   if (isLoading) {
     return <P>Loading...</P>;
@@ -37,6 +39,7 @@ export const SearchMovieResults = ({
       movies={movies}
       isLoadingMore={isLoadingMore}
       onLoadMore={onLoadMore}
+      onPressItem={onPressItem}
     />
   );
 };
