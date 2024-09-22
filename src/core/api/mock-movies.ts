@@ -33,3 +33,13 @@ export const fetchMoviesMock = async (
     total_results: totalResults,
   };
 };
+
+export const fetchMovieByIdMock = async (id: number) => {
+  const movie = mockMovies.find(m => m.id === id);
+
+  if (!movie) {
+    throw new Error(`Movie with id ${id} not found`);
+  }
+
+  return movie;
+};

@@ -1,9 +1,10 @@
 import React from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {StyleSheet, View, Image, Pressable} from 'react-native';
 import {spacing} from './spacing';
 
 type ListItemProps = {
   children: React.ReactNode;
+  onPressItem: () => void;
 };
 
 type ListItemImageProps = {
@@ -14,10 +15,16 @@ type ListItemContentProps = {
   children: React.ReactNode;
 };
 
-export const ListItem = ({children}: ListItemProps) => (
-  <View style={styles.container}>
-    <View style={styles.listitem}>{children}</View>
-  </View>
+export const ListItem = ({children, onPressItem}: ListItemProps) => (
+  <Pressable onPress={onPressItem}>
+    {({pressed}) => (
+      <View style={[styles.container, pressed && styles.pressed]}>
+        <View style={[styles.listitem]}>
+          {children}
+        </View>
+      </View>
+    )}
+  </Pressable>
 );
 
 const ListItemImage = ({uri}: ListItemImageProps) => (
@@ -48,6 +55,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: spacing.m,
     overflow: 'hidden',
+  },
+  pressed: {
+    backgroundColor: '#3333',
   },
   image: {
     width: 80,

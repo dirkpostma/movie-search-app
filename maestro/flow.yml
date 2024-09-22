@@ -2,7 +2,21 @@ appId: nl.dirkpostma.moviesearch
 ---
 - launchApp
 - assertVisible: "Search movies..."
+- assertVisible: "Popular Movies"
+- assertVisible: "Deadpool & Wolverine Released: Wed Jul 24 2024"
 - tapOn: "Search movies..."
-- inputText: "a beautiful mind"
-- assertVisible: "A Beautiful Mind"
-
+- inputText: "f"
+- assertVisible: "Officer Black Belt Released: Tue Sep 10 2024"
+- tapOn: "Officer Black Belt Released: Tue Sep 10 2024"
+- assertVisible: "A talented martial artist who can't walk past a person in need unites with a probation officer to fight and prevent crime as a martial arts officer."
+- tapOn: "Search movie"
+- swipe:  
+    start: 50%, 80%
+    end: 50%, 20%
+- swipe:  
+    start: 50%, 80%
+    end: 50%, 20%
+- assertVisible: "Wonderful Days Released: Thu Jul 17 2003"
+- tapOn: "Search movies..."
+- eraseText
+- assertVisible: "Deadpool & Wolverine Released: Wed Jul 24 2024"

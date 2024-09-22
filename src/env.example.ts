@@ -8,4 +8,8 @@ export const env = {
   // API key for The Movie Database
   // Generate at https://www.themoviedb.org/
   TMDB_API_KEY: 'xxx',
+
+  // Set to true if running end-to-end tests
+  // This will enable the mock api (mocked baseQuery)
+  IS_E2E: false,
 };

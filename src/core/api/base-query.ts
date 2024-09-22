@@ -1,5 +1,6 @@
 import {BaseQueryFn, fetchBaseQuery} from '@reduxjs/toolkit/query';
-import {fetchMoviesMock} from './mock-movies';
+import {fetchMovieByIdMock, fetchMoviesMock} from './mock-movies';
+import {env} from '../../env';
 
 type QueryParams = Record<string, string>;
 
@@ -29,6 +30,12 @@ const defaultFetchFunction: FetchFunction = async ({url, params}) => {
     return await fetchMoviesMock(query, page);
   } else if (url.includes('/movie/popular')) {
     return await fetchMoviesMock(undefined, page);
+  } else if (url.match(/\/movie\/\d+$/)) {
+    const id = parseInt(url.split('/').pop() || '', 10);
+    if (isNaN(id)) {
+      throw new Error('Invalid movie ID');
+    }
+    return await fetchMovieByIdMock(id);
   } else {
     throw new Error('Unsupported endpoint');
   }
@@ -74,7 +81,9 @@ export const setMockBaseQuery = () => {
   currentBaseQuery = mockBaseQuery;
 };
 
-let currentBaseQuery: BaseQueryFn = productionBaseQuery;
+let currentBaseQuery: BaseQueryFn = env.IS_E2E
+  ? mockBaseQuery
+  : productionBaseQuery;
 
 export const dynamicBaseQuery: BaseQueryFn = async (
   args,
