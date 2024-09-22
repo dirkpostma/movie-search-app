@@ -1,6 +1,7 @@
-import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
+import {createApi} from '@reduxjs/toolkit/query/react';
 import {env} from '../../env';
 import {ListResponse, Movie} from './types';
+import {dynamicBaseQuery} from './base-query';
 
 type MovieListResponse = ListResponse<Movie>;
 
@@ -16,7 +17,7 @@ type MoviePopularQueryParams = PaginationQueryParams;
 
 export const movieApi = createApi({
   reducerPath: 'movieApi',
-  baseQuery: fetchBaseQuery({baseUrl: 'https://api.themoviedb.org/3'}),
+  baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getSearchMovies: builder.query<MovieListResponse, SearchMoviesQueryParams>({
       query: ({query, page}) =>

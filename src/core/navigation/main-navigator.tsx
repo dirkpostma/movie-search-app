@@ -3,8 +3,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SearchMovieScreen} from '../../features/search-movie/search-movie-screen';
 import {MovieDetailsScreen} from '../../features/movie-details/movie-details-screen';
+import {TestInfiniteQueryHook} from '../../features/search-movie/test-infinite-query-hook';
 
 export type RootStackParamList = {
+  TestInfiniteQueryHook: undefined;
   SearchMovieScreen: undefined;
   MovieDetailsScreen: {id: number};
 };
@@ -15,6 +17,10 @@ export const MainNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="TestInfiniteQueryHook"
+          component={TestInfiniteQueryHook}
+        />
         <Stack.Screen
           name="SearchMovieScreen"
           component={SearchMovieScreen}

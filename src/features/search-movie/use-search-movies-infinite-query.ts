@@ -45,7 +45,7 @@ export function useSearchMoviesInfiniteQuery() {
         ...prevState,
         pages: [...prevState.pages, data.results],
       }));
-      setHasMore(data.results.length > 0 && data.page < data.total_pages);
+      setHasMore(data.results?.length > 0 && data.page < data.total_pages);
     }
   }, [data]);
 
@@ -68,5 +68,6 @@ export function useSearchMoviesInfiniteQuery() {
     isFetching,
     error,
     loadMore,
+    hasMore,
   };
 }

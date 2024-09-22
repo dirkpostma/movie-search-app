@@ -25,3 +25,22 @@ To investigate:
 ## UI components
 
 Added UI components using atomic design principle. Only atoms are allowed to have styling, rest of components are built strictly using atoms. To have good separation of concerns, UI components don't have any business logic.
+
+## Mocking the API
+
+### Challenge: mock global fetch
+For unit- and E2E testing, its imperative to be able to mock external dependencies, in this case, the API of themoviedb.org. The default setup of RTK Query uses global `fetch` to fetch data. Several attemps were made to replace this global fetch function with a mocked one. This was quite hard as RTK Query uses the `response.clone`, which appears hard to mock properly. Also, libraries such as `jest-fetch-mock` didn't mock the clone function, making them unsuitable for our use case.
+
+### Mock Service Worker
+
+For jest environment I managed to use MSW (Mock Service Worker), as recommended in the [redux docs](https://redux.js.org/usage/writing-tests#ui-and-network-testing-tools). Unfortunately, for E2E tests, although [it should be possible](https://mswjs.io/docs/integrations/react-native/) I didn't manage to integrate MSW in React Native builds succesfully.
+
+### Mock baseQuery
+
+After giving this some thoughts, I got the idea to mock on a level higher: in stead of replacing `global.fetch`, can't we use tell RTK Query to use another fetch function? And yes, this is possible. I ended up writing a proof of concept of testing with a replaced `baseQuery`, see https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery
+
+This approach has several benefits: 
+- no complexities of dealing with `global.fetch` and mocking `response.clone`
+- the same mocking aproach can be used for both unit tests and E2E tests
+- no external mocking libraries needed
+
