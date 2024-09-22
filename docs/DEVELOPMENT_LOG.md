@@ -21,3 +21,7 @@ Ideas to improve:
 To investigate:
 - Does RTK Query support infinite scroll out of the box?
 - How to get redux devtools running with redux toolkit + hermes?
+
+## UI components
+
+Added UI components using atomic design principle. Only atoms are allowed to have styling, rest of components are built strictly using atoms. To have good separation of concerns, UI components don't have any business logic.

@@ -1,6 +1,5 @@
 import {http, HttpResponse} from 'msw';
 import {setupServer} from 'msw/node';
-import {expect, beforeAll, afterAll, afterEach, test} from '@jest/globals';
 
 const server = setupServer(
   http.get('https://example.com/api', () => {

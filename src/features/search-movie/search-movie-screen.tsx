@@ -1,5 +1,5 @@
 import React from 'react';
-import {SearchMovie} from './search-movie';
+import {SearchMovie} from '../../core/ui/templates/search-movie';
 import {useSearchMoviesInfiniteQuery} from './use-search-movies-infinite-query';
 
 export const SearchMovieScreen = () => {
@@ -9,7 +9,7 @@ export const SearchMovieScreen = () => {
   return (
     <SearchMovie
       query={query}
-      onSearch={setQuery}
+      setQuery={setQuery}
       movies={movies}
       isLoading={isLoading}
       isLoadingMore={isFetching}

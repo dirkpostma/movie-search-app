@@ -1,14 +1,6 @@
 import 'react-native';
 import React from 'react';
 import {
-  describe,
-  it,
-  expect,
-  beforeAll,
-  afterAll,
-  afterEach,
-} from '@jest/globals';
-import {
   fireEvent,
   render,
   waitFor,
@@ -21,7 +13,7 @@ import {store} from '../../core/store/store';
 
 import {setupServer} from 'msw/node';
 import {http, HttpResponse} from 'msw';
-import { movieApi } from '../../core/api/movie-api';
+import {movieApi} from '../../core/api/movie-api';
 
 const movies = [
   {id: 1, title: 'The Matrix'},
@@ -93,8 +85,8 @@ describe('SearchMovieScreen', () => {
     fireEvent(textField, 'change', {nativeEvent: {text: 'i'}});
 
     await waitFor(async () => {
-      expect(await findByText('#1 - The Matrix')).toBeDefined();
-      expect(await findByText('#2 - Inception')).toBeDefined();
+      expect(await findByText('The Matrix')).toBeDefined();
+      expect(await findByText('Inception')).toBeDefined();
     });
 
     // Prevent warning: ReferenceError: You are trying to access a property
@@ -116,11 +108,11 @@ describe('SearchMovieScreen', () => {
     fireEvent(textField, 'change', {nativeEvent: {text: 'inc'}});
 
     await waitFor(async () => {
-      const movieItem = await findByText('#2 - Inception');
+      const movieItem = await findByText('Inception');
       expect(movieItem).toBeDefined();
     });
 
-    expect(queryByText('#1 - The Matrix')).toBeNull();
+    expect(queryByText('The Matrix')).toBeNull();
 
     unmount();
     await new Promise(resolve => setTimeout(resolve, 500));

@@ -1,15 +1,11 @@
 import {useState, useEffect} from 'react';
 import {useLazyGetSearchMoviesQuery} from '../../core/api/movie-api';
+import {Movie} from '../../core/api/types';
 
-interface Movie {
-  id: number;
-  title: string;
-}
-
-interface State {
+type State = {
   page: number;
   pages: Movie[][];
-}
+};
 
 export function useSearchMoviesInfiniteQuery() {
   const [query, setQuery] = useState<string>('');

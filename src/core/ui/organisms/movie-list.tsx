@@ -1,19 +1,15 @@
 import {FlashList} from '@shopify/flash-list';
 import React from 'react';
-import {Text} from 'react-native';
-import {Movie} from '../../core/api/types';
+import {Movie} from '../../api/types';
+import {ListItem} from '../atoms/list-item';
+import {P} from '../atoms/typography';
+import {MovieListItem} from '../molecules/movie-list-item';
 
 type Props = {
   movies: Movie[];
   isLoadingMore: boolean;
   onLoadMore: () => void;
 };
-
-const MovieListItem = ({item}: {item: Movie}) => (
-  <Text key={item.id}>
-    #{item.id} - {item.title}
-  </Text>
-);
 
 export const MovieList = ({movies, isLoadingMore, onLoadMore}: Props) => {
   return (
@@ -24,7 +20,8 @@ export const MovieList = ({movies, isLoadingMore, onLoadMore}: Props) => {
       estimatedItemSize={50}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
-      ListFooterComponent={isLoadingMore ? <Text>Loading more...</Text> : null}
+      ListFooterComponent={isLoadingMore ? <P>Loading more...</P> : null}
+      ItemSeparatorComponent={ListItem.Separator}
     />
   );
 };

@@ -4,5 +4,5 @@ appId: nl.dirkpostma.moviesearch
 - assertVisible: "Search movies..."
 - tapOn: "Search movies..."
 - inputText: "a beautiful mind"
-- assertVisible: "#453 - a beautiful mind"
+- assertVisible: "A Beautiful Mind"
 
