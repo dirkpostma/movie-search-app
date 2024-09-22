@@ -8,6 +8,7 @@ import {
   setMockBaseQuery,
   setProductionBaseQuery,
 } from '../../core/api/base-query';
+import {SearchMovieTextInput} from '../../core/ui/molecules/search-movie-text-input';
 
 export const TestInfiniteQueryHook = () => {
   const {
@@ -24,18 +25,21 @@ export const TestInfiniteQueryHook = () => {
   return (
     <Screen>
       <H1>Test Infinite Query Hook</H1>
+      <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
       <Button title="Load More" onPress={loadMore} />
-      <Button title="Set the matrix" onPress={() => setQuery('the matrix')} />
-      <Button title="Set inception" onPress={() => setQuery('inception')} />
-      <Button title="Set mock baseQuery" onPress={() => setMockBaseQuery()} />
-      <Button
-        title="Set production baseQuery"
-        onPress={() => setProductionBaseQuery()}
-      />
+      <Button title="Mock baseQuery" onPress={() => setMockBaseQuery()} />
+      <Button title="Production baseQuery" onPress={() => setProductionBaseQuery()}/>
 
       <P>
         {JSON.stringify(
-          {query, isLoading, isFetching, error, hasMore},
+          {
+            query,
+            isLoading,
+            isFetching,
+            error,
+            hasMore,
+            numResults: movies.length,
+          },
           null,
           2,
         )}

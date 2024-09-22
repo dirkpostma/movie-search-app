@@ -1,41 +1,38 @@
 import {BaseQueryFn, fetchBaseQuery} from '@reduxjs/toolkit/query';
-import {Movie} from './types';
+import { fetchMoviesMock } from './mock-movies';
 
-const fetchSomeData = async () => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  const mockData: Movie[] = [
-    {
-      id: 1,
-      title: 'Inception',
-      overview: 'Inception overview',
-      poster_path: '/inception.jpg',
-      release_date: '2001-01-01',
-    },
-    {
-      id: 2,
-      title: 'The Matrix',
-      overview: 'Overview of The Matrix',
-      poster_path: '/thematrix.jpg',
-      release_date: '2002-02-02',
-    },
-  ];
-
-  return {
-    results: mockData,
-    total_pages: 1,
-    page: 1,
-    total_results: 2,
-  };
+const parseQueryParams = (queryString: string): Record<string, string> => {
+  const params: Record<string, string> = {};
+  const pairs = queryString.replace(/^\?/, '').split('&');
+  for (const pair of pairs) {
+    const [key, value] = pair.split('=');
+    params[decodeURIComponent(key)] = decodeURIComponent(value || '');
+  }
+  return params;
 };
 
-// See https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery
-const mockBaseQuery: BaseQueryFn = async () => {
+const mockBaseQuery: BaseQueryFn = async args => {
   try {
-    const data = await fetchSomeData();
+    let data;
+    if (typeof args === 'string') {
+      const [path, queryString] = args.split('?');
+      const params = parseQueryParams(queryString || '');
+      const page = parseInt(params.page || '1', 10);
+
+      if (path.includes('/search/movie')) {
+        const query = params.query || '';
+        data = await fetchMoviesMock(query, page);
+      } else if (path.includes('/movie/popular')) {
+        data = await fetchMoviesMock(undefined, page);
+      } else {
+        throw new Error('Unsupported endpoint');
+      }
+    } else {
+      throw new Error('Unsupported query format');
+    }
     return {data};
   } catch (error) {
-    return {error};
+    return {error: error instanceof Error ? error.message : 'Unknown error'};
   }
 };
 
