@@ -44,3 +44,6 @@ This approach has several benefits:
 - the same mocking aproach can be used for both unit tests and E2E tests
 - no external mocking libraries needed
 
+## Improve Hook Search Infinite Scroll
+
+The hook that takes care of infinite scroll for the search feature is improved. Using `transformResponse` we add the query to the response. That way, in the hook we can check if the response actually belongs to the current query. If not, the results are ignored. The fetch function can now be set dynamically, so we can e.g. mock and test error responses.

@@ -22,6 +22,12 @@ export const movieApi = createApi({
     getSearchMovies: builder.query<MovieListResponse, SearchMoviesQueryParams>({
       query: ({query, page}) =>
         `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
+      transformResponse: (response: MovieListResponse, meta, arg) => {
+        return {
+          ...response,
+          query: arg.query,
+        };
+      },
     }),
     getMoviePopular: builder.query<MovieListResponse, MoviePopularQueryParams>({
       query: ({page}) =>

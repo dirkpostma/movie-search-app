@@ -5,10 +5,17 @@ import {Screen} from '../../core/ui/atoms/screen';
 import {H1, P} from '../../core/ui/atoms/typography';
 import {Button, ScrollView} from 'react-native';
 import {
+  setDefaultFetchFunction,
+  setFetchFunction,
   setMockBaseQuery,
   setProductionBaseQuery,
 } from '../../core/api/base-query';
 import {SearchMovieTextInput} from '../../core/ui/molecules/search-movie-text-input';
+
+const setErrorResponse = () =>
+  setFetchFunction(async () => {
+    throw new Error('Test error response');
+  });
 
 export const TestInfiniteQueryHook = () => {
   const {
@@ -20,6 +27,7 @@ export const TestInfiniteQueryHook = () => {
     error,
     loadMore,
     hasMore,
+    retryLastPage,
   } = useSearchMoviesInfiniteQuery();
 
   return (
@@ -28,7 +36,19 @@ export const TestInfiniteQueryHook = () => {
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
       <Button title="Load More" onPress={loadMore} />
       <Button title="Mock baseQuery" onPress={() => setMockBaseQuery()} />
-      <Button title="Production baseQuery" onPress={() => setProductionBaseQuery()}/>
+      <Button title="Set error response" onPress={setErrorResponse} />
+      <Button title="Set default response" onPress={setDefaultFetchFunction} />
+      <Button
+        title="Production baseQuery"
+        onPress={() => setProductionBaseQuery()}
+      />
+
+      {error && (
+        <>
+          <P>An error occurred</P>
+          <Button title="Retry" onPress={retryLastPage} />
+        </>
+      )}
 
       <P>
         {JSON.stringify(

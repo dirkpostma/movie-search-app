@@ -1,10 +1,12 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import {useLazyGetSearchMoviesQuery} from '../../core/api/movie-api';
 import {Movie} from '../../core/api/types';
 
 type State = {
   page: number;
   pages: Movie[][];
+  hasMore: boolean;
+  error?: boolean;
 };
 
 export function useSearchMoviesInfiniteQuery() {
@@ -12,51 +14,64 @@ export function useSearchMoviesInfiniteQuery() {
   const [state, setState] = useState<State>({
     page: 1,
     pages: [],
+    hasMore: false,
+    error: false,
   });
-  const [hasMore, setHasMore] = useState<boolean>(false);
 
   const [trigger, {data, error, isLoading, isFetching}] =
     useLazyGetSearchMoviesQuery();
 
+  // When the query changes, reset the state and trigger a fetch if query is not empty
   useEffect(() => {
+    setState({
+      page: 1,
+      pages: [],
+      hasMore: false,
+      error: undefined,
+    });
     if (query.length > 0) {
-      setState({
-        page: 1,
-        pages: [],
-      });
       trigger({query, page: 1});
-    } else {
-      setState({
-        page: 1,
-        pages: [],
-      });
     }
   }, [query, trigger]);
 
   useEffect(() => {
-    if (state.page > 1) {
-      trigger({query, page: state.page});
-    }
-  }, [state.page, query, trigger]);
-
-  useEffect(() => {
-    if (data) {
+    if (error) {
+      setState(prevState => ({
+        ...prevState,
+        error: true,
+        hasMore: false,
+      }));
+    } else if (data && data.query === query) {
       setState(prevState => ({
         ...prevState,
         pages: [...prevState.pages, data.results],
+        hasMore: data.results?.length > 0 && data.page < data.total_pages,
+        error: false,
       }));
-      setHasMore(data.results?.length > 0 && data.page < data.total_pages);
     }
-  }, [data]);
+  }, [data, error, query]);
 
-  const loadMore = () => {
-    if (!isFetching && hasMore) {
+  const loadMore = useCallback(() => {
+    if (!isFetching && state.hasMore && query.length > 0 && !state.error) {
+      const nextPage = state.page + 1;
       setState(prevState => ({
         ...prevState,
-        page: prevState.page + 1,
+        page: nextPage,
+        error: false,
       }));
+      trigger({query, page: nextPage});
     }
-  };
+  }, [isFetching, state.hasMore, state.page, query, trigger, state.error]);
+
+  const retryLastPage = useCallback(() => {
+    if (!isFetching && query.length > 0) {
+      setState(prevState => ({
+        ...prevState,
+        error: false,
+      }));
+      trigger({query, page: state.page});
+    }
+  }, [isFetching, query, state.page, trigger]);
 
   const movies = state.pages.flat();
 
@@ -66,8 +81,9 @@ export function useSearchMoviesInfiniteQuery() {
     movies,
     isLoading,
     isFetching,
-    error,
+    error: state.error,
     loadMore,
-    hasMore,
+    hasMore: state.hasMore,
+    retryLastPage,
   };
 }

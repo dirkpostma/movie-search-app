@@ -1,8 +1,10 @@
 import {BaseQueryFn, fetchBaseQuery} from '@reduxjs/toolkit/query';
-import { fetchMoviesMock } from './mock-movies';
+import {fetchMoviesMock} from './mock-movies';
 
-const parseQueryParams = (queryString: string): Record<string, string> => {
-  const params: Record<string, string> = {};
+type QueryParams = Record<string, string>;
+
+const parseQueryParams = (queryString: string): QueryParams => {
+  const params: QueryParams = {};
   const pairs = queryString.replace(/^\?/, '').split('&');
   for (const pair of pairs) {
     const [key, value] = pair.split('=');
@@ -11,26 +13,50 @@ const parseQueryParams = (queryString: string): Record<string, string> => {
   return params;
 };
 
-const mockBaseQuery: BaseQueryFn = async args => {
-  try {
-    let data;
-    if (typeof args === 'string') {
-      const [path, queryString] = args.split('?');
-      const params = parseQueryParams(queryString || '');
-      const page = parseInt(params.page || '1', 10);
+type FetchFunction = ({
+  url,
+  params,
+}: {
+  url: string;
+  params: QueryParams;
+}) => Promise<any>;
 
-      if (path.includes('/search/movie')) {
-        const query = params.query || '';
-        data = await fetchMoviesMock(query, page);
-      } else if (path.includes('/movie/popular')) {
-        data = await fetchMoviesMock(undefined, page);
-      } else {
-        throw new Error('Unsupported endpoint');
-      }
+const defaultFetchFunction: FetchFunction = async ({url, params}) => {
+  const page = parseInt(params.page || '1', 10);
+
+  if (url.includes('/search/movie')) {
+    const query = params.query || '';
+    return await fetchMoviesMock(query, page);
+  } else if (url.includes('/movie/popular')) {
+    return await fetchMoviesMock(undefined, page);
+  } else {
+    throw new Error('Unsupported endpoint');
+  }
+};
+
+let currentFetchFunction: FetchFunction = defaultFetchFunction;
+
+export const setFetchFunction = (fetchFunction: FetchFunction) => {
+  currentFetchFunction = fetchFunction;
+};
+
+export const setDefaultFetchFunction = () => {
+  setFetchFunction(defaultFetchFunction);
+};
+
+const mockBaseQuery: BaseQueryFn = async args => {
+  await new Promise(resolve => setTimeout(resolve, 500));
+  let data;
+
+  try {
+    if (typeof args === 'string') {
+      const [url, queryString] = args.split('?');
+      const params = parseQueryParams(queryString || '');
+      data = await currentFetchFunction({url, params});
+      return {data};
     } else {
-      throw new Error('Unsupported query format');
+      throw new Error('Unsupported format mockBaseQuery');
     }
-    return {data};
   } catch (error) {
     return {error: error instanceof Error ? error.message : 'Unknown error'};
   }
