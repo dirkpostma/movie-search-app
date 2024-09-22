@@ -51,6 +51,9 @@ export const handlers = [
 
     return HttpResponse.json(response);
   }),
+  http.get('*', async () => {
+    return new HttpResponse({}, {status: 500});
+  }),
 ];
 
 const server = setupServer(...handlers);
