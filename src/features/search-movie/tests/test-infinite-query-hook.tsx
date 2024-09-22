@@ -1,16 +1,16 @@
 import React from 'react';
 
-import {useSearchMoviesInfiniteQuery} from './use-search-movies-infinite-query';
-import {Screen} from '../../core/ui/atoms/screen';
-import {H1, P} from '../../core/ui/atoms/typography';
+import {useSearchMoviesInfiniteQuery} from '../use-search-movies-infinite-query';
+import {Screen} from '../../../core/ui/atoms/screen';
+import {H1, P} from '../../../core/ui/atoms/typography';
 import {Button, ScrollView} from 'react-native';
 import {
   setDefaultFetchFunction,
   setFetchFunction,
   setMockBaseQuery,
   setProductionBaseQuery,
-} from '../../core/api/base-query';
-import {SearchMovieTextInput} from '../../core/ui/molecules/search-movie-text-input';
+} from '../../../core/api/base-query';
+import {SearchMovieTextInput} from '../../../core/ui/molecules/search-movie-text-input';
 
 const setErrorResponse = () =>
   setFetchFunction(async () => {

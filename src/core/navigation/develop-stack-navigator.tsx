@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {TestInfiniteQueryHook} from '../../features/search-movie/test-infinite-query-hook';
+import {TestInfiniteQueryHook} from '../../features/search-movie/tests/test-infinite-query-hook';
 
 export type DevelopStackParamList = {
   TestInfiniteQueryHook: undefined;
