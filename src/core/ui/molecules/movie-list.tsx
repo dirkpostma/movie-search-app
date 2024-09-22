@@ -7,15 +7,15 @@ import {MovieListItem} from './movie-list-item';
 
 type Props = {
   movies: Movie[];
-  isLoadingMore: boolean;
-  onLoadMore: () => void;
+  isLoadingMore?: boolean;
+  onLoadMore?: () => void;
   onPressItem: (id: number) => void;
 };
 
 export const MovieList = ({
   movies,
-  isLoadingMore,
-  onLoadMore,
+  isLoadingMore = false,
+  onLoadMore = () => {},
   onPressItem,
 }: Props) => {
   return (
@@ -28,7 +28,7 @@ export const MovieList = ({
       estimatedItemSize={50}
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
-      ListFooterComponent={isLoadingMore ? <P>Loading more...</P> : null}
+      ListFooterComponent={isLoadingMore ? <P>Loading...</P> : null}
       ItemSeparatorComponent={ListItem.Separator}
     />
   );
