@@ -11,7 +11,13 @@ import {store} from '../../core/store/store';
 import {http, HttpResponse} from 'msw';
 import {SearchMoviePage} from './search-movie-page';
 import {server} from './tests/test-setup-msw-mock-movies';
-import { movieApi } from '../../core/api/movie-api';
+import {movieApi} from '../../core/api/movie-api';
+import {setProductionBaseQuery} from '../../core/api/base-query';
+
+// Make sure to use the production base query, even if IS_E2E is set to true
+// Note: ideally, we should use setMockBaseQuery() here, but I didn't
+// want to throw away the MSW mock approach yet, to show case
+setProductionBaseQuery();
 
 beforeAll(() => server.listen());
 afterEach(() => {

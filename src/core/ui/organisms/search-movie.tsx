@@ -2,7 +2,6 @@ import React from 'react';
 import {Movie} from '../../api/types';
 import {SearchMovieTextInput} from '../molecules/search-movie-text-input';
 import {SearchMovieResults} from '../molecules/search-movie-results';
-import {P} from '../atoms/typography';
 import {MoviePopularPage} from '../../../features/movie-popular/movie-popular-page';
 
 type Props = {
