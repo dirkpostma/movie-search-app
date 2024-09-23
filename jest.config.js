@@ -7,4 +7,5 @@ module.exports = {
     'node_modules/(?!(react-native|@react-native|react-redux|@react-navigation)/)',
   ],
   setupFiles: ['./jest-setup.js'],
+  setupFilesAfterEnv: ['@testing-library/react-native/extend-expect'],
 };

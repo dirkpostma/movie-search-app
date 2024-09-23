@@ -2,8 +2,8 @@ import React from 'react';
 
 import {useSearchMoviesInfiniteQuery} from '../use-search-movies-infinite-query';
 import {Screen} from '../../../core/ui/atoms/screen';
-import {H1, P} from '../../../core/ui/atoms/typography';
-import {Button, ScrollView} from 'react-native';
+import {H1} from '../../../core/ui/atoms/typography';
+import {Button, ScrollView, Text} from 'react-native';
 import {
   setDefaultFetchFunction,
   setFetchFunction,
@@ -19,7 +19,6 @@ const setErrorResponse = () =>
 
 export const TestInfiniteQueryHook = () => {
   const {
-    query,
     setQuery,
     movies,
     isLoading,
@@ -43,35 +42,24 @@ export const TestInfiniteQueryHook = () => {
         onPress={() => setProductionBaseQuery()}
       />
 
+      <Text>isLoading: {isLoading ? 'true' : 'false'}</Text>
+      <Text>isFetching: {isFetching ? 'true' : 'false'}</Text>
+      <Text>error: {error ? 'true' : 'false'}</Text>
+      <Text>hasMore: {hasMore ? 'true' : 'false'}</Text>
+      <Text>numResults: {movies.length}</Text>
+      <Text>----</Text>
+
       {error && (
         <>
-          <P>An error occurred</P>
+          <Text>An error occurred</Text>
           <Button title="Retry" onPress={retryLastPage} />
         </>
       )}
 
-      <P>
-        {JSON.stringify(
-          {
-            query,
-            isLoading,
-            isFetching,
-            error,
-            hasMore,
-            numResults: movies.length,
-          },
-          null,
-          2,
-        )}
-      </P>
       <ScrollView>
-        <P>
-          {JSON.stringify(
-            movies.map(movie => ({id: movie.id, title: movie.title})),
-            null,
-            2,
-          )}
-        </P>
+        {movies.map(movie => (
+          <Text key={movie.id}>{movie.title}</Text>
+        ))}
       </ScrollView>
     </Screen>
   );

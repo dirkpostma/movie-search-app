@@ -2,6 +2,8 @@ import {BaseQueryFn, fetchBaseQuery} from '@reduxjs/toolkit/query';
 import {fetchMovieByIdMock, fetchMoviesMock} from './mock-movies';
 import {env} from '../../env';
 
+export const MOCK_API_DELAY_MS = 1000;
+
 type QueryParams = Record<string, string>;
 
 const parseQueryParams = (queryString: string): QueryParams => {
@@ -52,7 +54,7 @@ export const setDefaultFetchFunction = () => {
 };
 
 const mockBaseQuery: BaseQueryFn = async args => {
-  await new Promise(resolve => setTimeout(resolve, 500));
+  await new Promise(resolve => setTimeout(resolve, MOCK_API_DELAY_MS));
   let data;
 
   try {

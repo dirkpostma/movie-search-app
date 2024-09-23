@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from 'react';
+import {useState, useEffect, useCallback, useRef} from 'react';
 import {useLazyGetSearchMoviesQuery} from '../../core/api/movie-api';
 import {Movie} from '../../core/api/types';
 
@@ -17,59 +17,123 @@ export function useSearchMoviesInfiniteQuery() {
     hasMore: false,
     error: false,
   });
+  const requestIdRef = useRef<number>(0);
+  const currentQueryRef = useRef<string>('');
 
-  const [trigger, {data, error, isLoading, isFetching}] =
-    useLazyGetSearchMoviesQuery();
+  const [trigger, {isLoading, isFetching}] = useLazyGetSearchMoviesQuery();
 
-  // When the query changes, reset the state and trigger a fetch if query is not empty
   useEffect(() => {
-    setState({
-      page: 1,
-      pages: [],
-      hasMore: false,
-      error: undefined,
-    });
-    if (query.length > 0) {
-      trigger({query, page: 1});
-    }
+    const fetchData = async () => {
+      setState({
+        page: 1,
+        pages: [],
+        hasMore: false,
+        error: false,
+      });
+
+      if (query.length === 0) {
+        currentQueryRef.current = '';
+        return;
+      }
+
+      currentQueryRef.current = query;
+      const currentRequestId = ++requestIdRef.current;
+
+      const response = await trigger({query, page: 1});
+      if (
+        currentRequestId !== requestIdRef.current ||
+        query !== currentQueryRef.current
+      ) {
+        return;
+      }
+      if (response.data) {
+        setState(prevState => ({
+          ...prevState,
+          pages: [response.data!.results],
+          hasMore:
+            response.data!.results.length > 0 &&
+            response.data!.page < response.data!.total_pages,
+        }));
+      } else if (response.error) {
+        if (
+          currentRequestId === requestIdRef.current &&
+          query === currentQueryRef.current
+        ) {
+          setState(prevState => ({...prevState, error: true}));
+        }
+      }
+    };
+
+    fetchData();
   }, [query, trigger]);
 
-  useEffect(() => {
-    if (error) {
-      setState(prevState => ({
-        ...prevState,
-        error: true,
-        hasMore: false,
-      }));
-    } else if (data && data.query === query) {
-      setState(prevState => ({
-        ...prevState,
-        pages: [...prevState.pages, data.results],
-        hasMore: data.results?.length > 0 && data.page < data.total_pages,
-        error: false,
-      }));
-    }
-  }, [data, error, query]);
-
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback(async () => {
     if (!isFetching && state.hasMore && query.length > 0 && !state.error) {
       const nextPage = state.page + 1;
+      const currentRequestId = ++requestIdRef.current;
+
       setState(prevState => ({
         ...prevState,
         page: nextPage,
         error: false,
       }));
-      trigger({query, page: nextPage});
+      const response = await trigger({query, page: nextPage});
+      if (
+        currentRequestId !== requestIdRef.current ||
+        query !== currentQueryRef.current
+      ) {
+        return;
+      }
+      if (response.data) {
+        setState(prevState => ({
+          ...prevState,
+          pages: [...prevState.pages, response.data!.results],
+          hasMore:
+            response.data!.results.length > 0 &&
+            response.data!.page < response.data!.total_pages,
+        }));
+      } else if (response.error) {
+        if (
+          currentRequestId === requestIdRef.current &&
+          query === currentQueryRef.current
+        ) {
+          setState(prevState => ({...prevState, error: true}));
+        }
+      }
     }
   }, [isFetching, state.hasMore, state.page, query, trigger, state.error]);
 
-  const retryLastPage = useCallback(() => {
+  const retryLastPage = useCallback(async () => {
     if (!isFetching && query.length > 0) {
+      const currentRequestId = ++requestIdRef.current;
+
       setState(prevState => ({
         ...prevState,
         error: false,
       }));
-      trigger({query, page: state.page});
+      const response = await trigger({query, page: state.page});
+      if (
+        currentRequestId !== requestIdRef.current ||
+        query !== currentQueryRef.current
+      ) {
+        return;
+      }
+      if (response.data) {
+        setState(prevState => ({
+          ...prevState,
+          pages: [...prevState.pages, response.data!.results],
+          hasMore:
+            response.data!.results.length > 0 &&
+            response.data!.page < response.data!.total_pages,
+        }));
+      } else if (response.error) {
+        if (
+          currentRequestId === requestIdRef.current &&
+          query === currentQueryRef.current
+        ) {
+          setState(prevState => ({...prevState, error: true}));
+        }
+      }
     }
   }, [isFetching, query, state.page, trigger]);
 
