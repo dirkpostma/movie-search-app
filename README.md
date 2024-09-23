@@ -17,9 +17,9 @@ By Dirk Postma
 
 - run `yarn test`
 
-## Run E2E tests
+## Run UI Tests
 
 - install [maestro](https://maestro.mobile.dev/)
 - in `src/env.ts`, set `IS_E2E` to `true`
-- make sure to set your iOS simulator lanuage to English
-- run `maestro test maestro/flow.yml`
+- make sure to set your simulator lanuage to English
+- run `maestro test maestro/flow-ios.yml` or `maestro test maestro/flow-android.yml`

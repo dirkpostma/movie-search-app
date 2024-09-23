@@ -1,0 +1,22 @@
+appId: nl.dirkpostma.moviesearch
+---
+- launchApp
+- assertVisible: "Search movies..."
+- assertVisible: "Popular Movies"
+- assertVisible: "Deadpool & Wolverine"
+- tapOn: "Search movies..."
+- inputText: "f"
+- assertVisible: "Officer Black Belt"
+- tapOn: "Officer Black Belt"
+- assertVisible: "A talented martial artist who can't walk past a person in need unites with a probation officer to fight and prevent crime as a martial arts officer."
+- tapOn: "Search movie"
+- swipe:  
+    start: 50%, 80%
+    end: 50%, 20%
+- swipe:  
+    start: 50%, 80%
+    end: 50%, 20%
+- assertVisible: "Wonderful Days"
+- tapOn: "Search movies..."
+- eraseText
+- assertVisible: "Deadpool & Wolverine"
