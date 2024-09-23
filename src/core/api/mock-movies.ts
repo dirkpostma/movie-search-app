@@ -1,6 +1,6 @@
-import page1 from './movie/popular/page_1.json';
-import page2 from './movie/popular/page_2.json';
-import page3 from './movie/popular/page_3.json';
+import page1 from './fixtures/movie/popular/page_1.json';
+import page2 from './fixtures//movie/popular/page_2.json';
+import page3 from './fixtures//movie/popular/page_3.json';
 
 const mockMovies = [...page1.results, ...page2.results, ...page3.results];
 
