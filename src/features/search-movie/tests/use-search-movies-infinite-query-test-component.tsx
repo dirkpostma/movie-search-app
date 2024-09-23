@@ -17,7 +17,7 @@ const setErrorResponse = () =>
     throw new Error('Test error response');
   });
 
-export const TestInfiniteQueryHook = () => {
+export const UseSearchMoviesInfiniteQueryTestComponent = () => {
   const {
     setQuery,
     movies,

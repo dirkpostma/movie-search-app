@@ -1,9 +1,9 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {TestInfiniteQueryHook} from '../../features/search-movie/tests/test-infinite-query-hook';
+import {UseSearchMoviesInfiniteQueryTestComponent} from '../../features/search-movie/tests/use-search-movies-infinite-query-test-component';
 
 export type DevelopStackParamList = {
-  TestInfiniteQueryHook: undefined;
+  UseSearchMoviesInfiniteQuery: undefined;
 };
 
 const Stack = createNativeStackNavigator<DevelopStackParamList>();
@@ -12,8 +12,8 @@ export const DevelopStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="TestInfiniteQueryHook"
-        component={TestInfiniteQueryHook}
+        name="UseSearchMoviesInfiniteQuery"
+        component={UseSearchMoviesInfiniteQueryTestComponent}
       />
     </Stack.Navigator>
   );

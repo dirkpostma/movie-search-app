@@ -12,4 +12,7 @@ export const env = {
   // Set to true if running end-to-end tests
   // This will enable the mock api (mocked baseQuery)
   IS_E2E: false,
+
+  // Set to true to enable dev tools, a.o. test components
+  DEV_TOOLS_ENABLED: false,
 };
