@@ -1,7 +1,8 @@
 # Movie Search App
 
 By Dirk Postma
-dirkpostma@gmail.com
+
+![Screenshot Maestro E2E tests](docs/screenshot_maestro.jpg)
 
 ## Getting Started
 
