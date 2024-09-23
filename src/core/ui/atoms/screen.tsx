@@ -15,5 +15,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.l,
     backgroundColor: 'white',
+    gap: spacing.l,
   },
 });
