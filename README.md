@@ -19,6 +19,6 @@ dirkpostma@gmail.com
 ## Run E2E tests
 
 - install [maestro](https://maestro.mobile.dev/)
-- in `src/env.ts`, set `IS_ENV` to `true`
+- in `src/env.ts`, set `IS_E2E` to `true`
 - make sure to set your iOS simulator lanuage to English
 - run `maestro test maestro/flow.yml`
