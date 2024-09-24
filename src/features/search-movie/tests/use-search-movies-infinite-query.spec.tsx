@@ -1,7 +1,11 @@
 import React from 'react';
 import {renderHook, act} from '@testing-library/react-hooks';
 import {Provider} from 'react-redux';
-import {setFetchFunction, setMockBaseQuery} from '../../../core/api/base-query';
+import {
+  setDefaultFetchFunction,
+  setFetchFunction,
+  setMockBaseQuery,
+} from '../../../core/api/base-query';
 import {useSearchMoviesInfiniteQuery} from '../use-search-movies-infinite-query';
 import {configureStore} from '@reduxjs/toolkit';
 import {movieApi} from '../../../core/api/movie-api';
@@ -243,5 +247,61 @@ describe('useSearchMoviesInfiniteQuery', () => {
 
     expect(result.current.movies).toHaveLength(0);
     expect(result.current.error).toBe(true);
+  });
+
+  it('should retry the last page after a failure', async () => {
+    const {result, rerender} = renderHook(
+      () => useSearchMoviesInfiniteQuery(),
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    // Fail on first attempt
+    setFetchFunction(async () => {
+      throw new Error('Simulated error');
+    });
+
+    act(() => result.current.setQuery('f'));
+    await act(async () => jest.advanceTimersByTime(API_DELAY_MS));
+    rerender();
+
+    expect(result.current.error).toBe(true);
+    expect(result.current.movies).toHaveLength(0);
+
+    // Succeed on retry
+    setDefaultFetchFunction();
+
+    act(() => {
+      result.current.retryLastPage();
+    });
+
+    await act(async () => jest.advanceTimersByTime(API_DELAY_MS));
+    rerender();
+
+    expect(result.current.error).toBe(false);
+    expect(result.current.movies).toHaveLength(5);
+    expect(result.current.movies[0].title).toBe('Officer Black Belt');
+  });
+
+  it('should ignore previous responses if query changes during fetch', async () => {
+    const {result, rerender} = renderHook(
+      () => useSearchMoviesInfiniteQuery(),
+      {
+        wrapper: Wrapper,
+      },
+    );
+
+    // While bust fetching "f", change query to "g"
+    act(() => result.current.setQuery('f'));
+    await act(async () => jest.advanceTimersByTime(500));
+    act(() => result.current.setQuery('g'));
+
+    await act(async () => jest.advanceTimersByTime(API_DELAY_MS));
+    rerender();
+
+    expect(result.current.query).toBe('g');
+    expect(result.current.movies).toHaveLength(5); // Results for "g"
+    expect(result.current.movies[0].title).toBe('Rebel Ridge');
   });
 });

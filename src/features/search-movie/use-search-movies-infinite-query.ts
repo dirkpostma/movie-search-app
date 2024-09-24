@@ -9,27 +9,55 @@ type State = {
   error?: boolean;
 };
 
+const initialState: State = {
+  page: 1,
+  pages: [],
+  hasMore: false,
+  error: false,
+};
+
 export function useSearchMoviesInfiniteQuery() {
   const [query, setQuery] = useState<string>('');
-  const [state, setState] = useState<State>({
-    page: 1,
-    pages: [],
-    hasMore: false,
-    error: false,
-  });
+  const [state, setState] = useState<State>(initialState);
   const requestIdRef = useRef<number>(0);
   const currentQueryRef = useRef<string>('');
 
   const [trigger, {isLoading, isFetching}] = useLazyGetSearchMoviesQuery();
 
+  const fetchPage = useCallback(
+    async ({searchQuery, page}: {searchQuery: string; page: number}) => {
+      const currentRequestId = ++requestIdRef.current;
+      const response = await trigger({query: searchQuery, page});
+
+      if (
+        currentRequestId !== requestIdRef.current ||
+        query !== currentQueryRef.current
+      ) {
+        return;
+      }
+
+      if (response.data) {
+        const {results, page: pageResponse, total_pages} = response.data;
+        setState(prevState => ({
+          ...prevState,
+          pages: [...prevState.pages, results],
+          hasMore: results.length > 0 && pageResponse < total_pages,
+        }));
+      } else if (response.error) {
+        if (
+          currentRequestId === requestIdRef.current &&
+          query === currentQueryRef.current
+        ) {
+          setState(prevState => ({...prevState, error: true}));
+        }
+      }
+    },
+    [trigger, query],
+  );
+
   useEffect(() => {
     const fetchData = async () => {
-      setState({
-        page: 1,
-        pages: [],
-        hasMore: false,
-        error: false,
-      });
+      setState(initialState);
 
       if (query.length === 0) {
         currentQueryRef.current = '';
@@ -37,105 +65,36 @@ export function useSearchMoviesInfiniteQuery() {
       }
 
       currentQueryRef.current = query;
-      const currentRequestId = ++requestIdRef.current;
-
-      const response = await trigger({query, page: 1});
-      if (
-        currentRequestId !== requestIdRef.current ||
-        query !== currentQueryRef.current
-      ) {
-        return;
-      }
-      if (response.data) {
-        setState(prevState => ({
-          ...prevState,
-          pages: [response.data!.results],
-          hasMore:
-            response.data!.results.length > 0 &&
-            response.data!.page < response.data!.total_pages,
-        }));
-      } else if (response.error) {
-        if (
-          currentRequestId === requestIdRef.current &&
-          query === currentQueryRef.current
-        ) {
-          setState(prevState => ({...prevState, error: true}));
-        }
-      }
+      fetchPage({searchQuery: query, page: 1});
     };
 
     fetchData();
-  }, [query, trigger]);
+  }, [query, fetchPage]);
 
   const loadMore = useCallback(async () => {
     if (!isFetching && state.hasMore && query.length > 0 && !state.error) {
       const nextPage = state.page + 1;
-      const currentRequestId = ++requestIdRef.current;
 
       setState(prevState => ({
         ...prevState,
         page: nextPage,
         error: false,
       }));
-      const response = await trigger({query, page: nextPage});
-      if (
-        currentRequestId !== requestIdRef.current ||
-        query !== currentQueryRef.current
-      ) {
-        return;
-      }
-      if (response.data) {
-        setState(prevState => ({
-          ...prevState,
-          pages: [...prevState.pages, response.data!.results],
-          hasMore:
-            response.data!.results.length > 0 &&
-            response.data!.page < response.data!.total_pages,
-        }));
-      } else if (response.error) {
-        if (
-          currentRequestId === requestIdRef.current &&
-          query === currentQueryRef.current
-        ) {
-          setState(prevState => ({...prevState, error: true}));
-        }
-      }
+
+      fetchPage({searchQuery: query, page: nextPage});
     }
-  }, [isFetching, state.hasMore, state.page, query, trigger, state.error]);
+  }, [isFetching, state.hasMore, state.error, fetchPage, query, state.page]);
 
   const retryLastPage = useCallback(async () => {
     if (!isFetching && query.length > 0) {
-      const currentRequestId = ++requestIdRef.current;
-
       setState(prevState => ({
         ...prevState,
         error: false,
       }));
-      const response = await trigger({query, page: state.page});
-      if (
-        currentRequestId !== requestIdRef.current ||
-        query !== currentQueryRef.current
-      ) {
-        return;
-      }
-      if (response.data) {
-        setState(prevState => ({
-          ...prevState,
-          pages: [...prevState.pages, response.data!.results],
-          hasMore:
-            response.data!.results.length > 0 &&
-            response.data!.page < response.data!.total_pages,
-        }));
-      } else if (response.error) {
-        if (
-          currentRequestId === requestIdRef.current &&
-          query === currentQueryRef.current
-        ) {
-          setState(prevState => ({...prevState, error: true}));
-        }
-      }
+
+      fetchPage({searchQuery: query, page: state.page});
     }
-  }, [isFetching, query, state.page, trigger]);
+  }, [isFetching, query, state.page, fetchPage]);
 
   const movies = state.pages.flat();
 

@@ -3,7 +3,7 @@ import React from 'react';
 import {useSearchMoviesInfiniteQuery} from '../use-search-movies-infinite-query';
 import {Screen} from '../../../core/ui/atoms/screen';
 import {H1} from '../../../core/ui/atoms/typography';
-import {Button, ScrollView, Text} from 'react-native';
+import {Button, ScrollView, Text, View} from 'react-native';
 import {
   setDefaultFetchFunction,
   setFetchFunction,
@@ -33,21 +33,28 @@ export const UseSearchMoviesInfiniteQueryTestComponent = () => {
     <Screen>
       <H1>Test Infinite Query Hook</H1>
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
-      <Button title="Load More" onPress={loadMore} />
-      <Button title="Mock baseQuery" onPress={() => setMockBaseQuery()} />
-      <Button title="Set error response" onPress={setErrorResponse} />
-      <Button title="Set default response" onPress={setDefaultFetchFunction} />
-      <Button
-        title="Production baseQuery"
-        onPress={() => setProductionBaseQuery()}
-      />
+      <View>
+        <Button title="Load More" onPress={loadMore} />
+        <Button title="Mock baseQuery" onPress={() => setMockBaseQuery()} />
+        <Button title="Set error response" onPress={setErrorResponse} />
+        <Button
+          title="Set default response"
+          onPress={setDefaultFetchFunction}
+        />
+        <Button
+          title="Production baseQuery"
+          onPress={() => setProductionBaseQuery()}
+        />
+      </View>
 
-      <Text>isLoading: {isLoading ? 'true' : 'false'}</Text>
-      <Text>isFetching: {isFetching ? 'true' : 'false'}</Text>
-      <Text>error: {error ? 'true' : 'false'}</Text>
-      <Text>hasMore: {hasMore ? 'true' : 'false'}</Text>
-      <Text>numResults: {movies.length}</Text>
-      <Text>----</Text>
+      <View>
+        <Text>isLoading: {isLoading ? 'true' : 'false'}</Text>
+        <Text>isFetching: {isFetching ? 'true' : 'false'}</Text>
+        <Text>error: {error ? 'true' : 'false'}</Text>
+        <Text>hasMore: {hasMore ? 'true' : 'false'}</Text>
+        <Text>numResults: {movies.length}</Text>
+        <Text>----</Text>
+      </View>
 
       {error && (
         <>
