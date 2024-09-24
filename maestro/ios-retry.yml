@@ -1,0 +1,18 @@
+appId: nl.dirkpostma.moviesearch
+---
+- launchApp
+- tapOn: Search movies...
+- inputText: f
+- tapOn: Develop, tab, 3 of 3
+- tapOn: Set error response
+- tapOn: Movie, tab, 1 of 3
+- swipe:
+    start: 50%, 80%
+    end: 50%, 20%
+- assertVisible: Error while loading. Click here to retry...
+- tapOn: Error while loading. Click here to retry...
+- tapOn: Develop, tab, 3 of 3
+- tapOn: Set default response
+- tapOn: Movie, tab, 1 of 3
+- tapOn: Error while loading. Click here to retry...
+- assertVisible: "Kung Fu Panda 4 Released: Sat Mar 02 2024"

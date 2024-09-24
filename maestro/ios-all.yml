@@ -1,0 +1,5 @@
+appId: nl.dirkpostma.moviesearch
+---
+- launchApp
+- runFlow: ios-retry.yml
+- runFlow: ios-happy-flow.yml
