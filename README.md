@@ -22,4 +22,4 @@ By Dirk Postma
 - install [maestro](https://maestro.mobile.dev/)
 - in `src/env.ts`, set `IS_E2E` to `true`
 - make sure to set your simulator lanuage to English
-- run `maestro test maestro/flow-ios.yml` or `maestro test maestro/flow-android.yml`
+- run `maestro test maestro/ios-all.yml` or `maestro test maestro/android-all.yml`
