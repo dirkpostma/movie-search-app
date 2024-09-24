@@ -85,7 +85,7 @@ export function useSearchMoviesInfiniteQuery() {
     }
   }, [isFetching, state.hasMore, state.error, fetchPage, query, state.page]);
 
-  const retryLastPage = useCallback(async () => {
+  const retryLastPage = useCallback(() => {
     if (!isFetching && query.length > 0) {
       setState(prevState => ({
         ...prevState,

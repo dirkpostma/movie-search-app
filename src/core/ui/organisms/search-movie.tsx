@@ -13,6 +13,7 @@ type Props = {
   error: boolean;
   onLoadMore: () => void;
   onPressItem: (id: number) => void;
+  retry: () => void;
 };
 
 export const SearchMovie = ({
@@ -24,6 +25,7 @@ export const SearchMovie = ({
   error,
   onLoadMore,
   onPressItem,
+  retry,
 }: Props) => {
   return (
     <>
@@ -42,6 +44,7 @@ export const SearchMovie = ({
           query={query}
           onLoadMore={onLoadMore}
           onPressItem={onPressItem}
+          retry={retry}
         />
       )}
     </>

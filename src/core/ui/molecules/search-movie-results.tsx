@@ -11,6 +11,7 @@ type Props = {
   query: string;
   onLoadMore: () => void;
   onPressItem: (id: number) => void;
+  retry: () => void;
 };
 
 export const SearchMovieResults = ({
@@ -21,16 +22,13 @@ export const SearchMovieResults = ({
   query,
   onLoadMore,
   onPressItem,
+  retry,
 }: Props) => {
   if (isLoading) {
     return <P>Loading...</P>;
   }
 
-  if (error) {
-    return <P>Error loading movies</P>;
-  }
-
-  if (!isLoadingMore && query && movies.length === 0) {
+  if (!error && !isLoadingMore && query && movies.length === 0) {
     return <P>No movies found</P>;
   }
 
@@ -40,6 +38,8 @@ export const SearchMovieResults = ({
       isLoadingMore={isLoadingMore}
       onLoadMore={onLoadMore}
       onPressItem={onPressItem}
+      error={error}
+      retry={retry}
     />
   );
 };

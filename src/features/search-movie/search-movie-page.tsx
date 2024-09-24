@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const SearchMoviePage = ({onPressItem}: Props) => {
-  const {query, setQuery, movies, isLoading, isFetching, error, loadMore} =
+  const {query, setQuery, movies, isLoading, isFetching, error, loadMore, retryLastPage} =
     useSearchMoviesInfiniteQuery();
 
   return (
@@ -18,6 +18,7 @@ export const SearchMoviePage = ({onPressItem}: Props) => {
       isLoading={isLoading}
       isLoadingMore={isFetching}
       error={!!error}
+      retry={retryLastPage}
       onLoadMore={loadMore}
       onPressItem={onPressItem}
     />

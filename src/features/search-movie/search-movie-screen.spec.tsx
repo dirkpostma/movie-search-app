@@ -116,7 +116,7 @@ describe('SearchMovieScreen', () => {
     fireEvent(textField, 'change', {nativeEvent: {text: 'inc'}});
 
     await waitFor(async () => {
-      const movieItem = await findByText('Error loading movies');
+      const movieItem = await findByText('Error while loading. Click here to retry...');
       expect(movieItem).toBeDefined();
     });
 
