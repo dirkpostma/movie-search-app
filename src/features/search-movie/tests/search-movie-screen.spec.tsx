@@ -7,12 +7,12 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react-native';
 import {Provider} from 'react-redux';
-import {store} from '../../core/store/store';
+import {store} from '../../../core/store/store';
 import {http, HttpResponse} from 'msw';
-import {SearchMoviePage} from './search-movie-page';
-import {server} from './tests/test-setup-msw-mock-movies';
-import {movieApi} from '../../core/api/movie-api';
-import {setProductionBaseQuery} from '../../core/api/base-query';
+import {SearchMoviePage} from '../search-movie-page';
+import {server} from './test-setup-msw-mock-movies';
+import {movieApi} from '../../../core/api/movie-api';
+import {setProductionBaseQuery} from '../../../core/api/base-query';
 
 // Make sure to use the production base query, even if IS_E2E is set to true
 // Note: ideally, we should use setMockBaseQuery() here, but I didn't
