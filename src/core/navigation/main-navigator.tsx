@@ -41,7 +41,7 @@ export const MainNavigator = () => {
         <Tab.Screen name="Movie" component={MovieStackNavigator} />
         <Tab.Screen name="About" component={AboutScreen} />
 
-        {env.DEV_TOOLS_ENABLED && (
+        {env.IS_E2E || env.DEV_TOOLS_ENABLED && (
           <Tab.Screen name="Develop" component={DevelopStackNavigator} />
         )}
       </Tab.Navigator>
