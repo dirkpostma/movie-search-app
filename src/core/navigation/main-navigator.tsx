@@ -34,14 +34,15 @@ export const MainNavigator = () => {
       <Tab.Navigator
         screenOptions={({route}) => ({
           headerShown: false,
-          tabBarIcon: ({focused, color, size}) => getTabBarIcon(route.name, focused, size, color),
+          tabBarIcon: ({focused, color, size}) =>
+            getTabBarIcon(route.name, focused, size, color),
           tabBarActiveTintColor: '#333',
           tabBarInactiveTintColor: '#999',
         })}>
         <Tab.Screen name="Movie" component={MovieStackNavigator} />
         <Tab.Screen name="About" component={AboutScreen} />
 
-        {env.IS_E2E || env.DEV_TOOLS_ENABLED && (
+        {(env.IS_E2E || env.DEV_TOOLS_ENABLED) && (
           <Tab.Screen name="Develop" component={DevelopStackNavigator} />
         )}
       </Tab.Navigator>
