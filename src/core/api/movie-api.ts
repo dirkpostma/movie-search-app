@@ -42,5 +42,5 @@ export const movieApi = createApi({
 export const {
   useLazyGetSearchMoviesQuery,
   useGetMovieByIdQuery,
-  useGetMoviePopularQuery,
+  useLazyGetMoviePopularQuery,
 } = movieApi;
