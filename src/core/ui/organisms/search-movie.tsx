@@ -2,7 +2,8 @@ import React from 'react';
 import {Movie} from '../../api/types';
 import {SearchMovieTextInput} from '../molecules/search-movie-text-input';
 import {SearchMovieResults} from '../molecules/search-movie-results';
-import {MoviePopularPage} from '../../../features/movie-popular/movie-popular-page';
+import {H3} from '../atoms/typography';
+import { Screen } from '../atoms/screen';
 
 type Props = {
   query: string;
@@ -28,25 +29,22 @@ export const SearchMovie = ({
   retry,
 }: Props) => {
   return (
-    <>
+    <Screen>
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
 
-      {!query ? (
-        <>
-          <MoviePopularPage onPressItem={onPressItem} />
-        </>
-      ) : (
-        <SearchMovieResults
-          movies={movies}
-          isLoading={isLoading}
-          isLoadingMore={isLoadingMore}
-          error={error}
-          query={query}
-          onLoadMore={onLoadMore}
-          onPressItem={onPressItem}
-          retry={retry}
-        />
-      )}
-    </>
+      {!query && <H3>Popular movies</H3>}
+      {query && <H3>Results for "{query}":</H3>}
+
+      <SearchMovieResults
+        movies={movies}
+        isLoading={isLoading}
+        isLoadingMore={isLoadingMore}
+        error={error}
+        query={query}
+        onLoadMore={onLoadMore}
+        onPressItem={onPressItem}
+        retry={retry}
+      />
+    </Screen>
   );
 };

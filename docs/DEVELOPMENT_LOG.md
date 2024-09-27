@@ -47,3 +47,11 @@ This approach has several benefits:
 ## Improve Hook Search Infinite Scroll
 
 The hook that takes care of infinite scroll for the search feature is improved. Using `transformResponse` we add the query to the response. That way, in the hook we can check if the response actually belongs to the current query. If not, the results are ignored. The fetch function can now be set dynamically, so we can e.g. mock and test error responses.
+
+## Solve race conditions with requestId counter
+
+Race conditions with respect to infinite scroll and search are now solved differently: to make sure only pages are added to the list that belong to the current query, a requestId is set before fetching page. If a response comes in, the requestId is compared with saved request id before the fetch. If the requestId or query don't match, incoming data is ignored.
+
+## Combined search & popular hooks
+
+After creating an inifite query hook for popular movies, I also create a hook that combines the search and popular queryies. This way, the results can be share on a single page. If query is empty, the movie list is populated with popular movies, otherwise, its populate with search results.

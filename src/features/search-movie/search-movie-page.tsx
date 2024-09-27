@@ -1,14 +1,22 @@
 import React from 'react';
 import {SearchMovie} from '../../core/ui/organisms/search-movie';
-import {useSearchMoviesInfiniteQuery} from './use-search-movies-infinite-query';
+import { useSearchMovies } from './use-search-movies';
 
 type Props = {
   onPressItem: (id: number) => void;
 };
 
 export const SearchMoviePage = ({onPressItem}: Props) => {
-  const {query, setQuery, movies, isLoading, isFetching, error, loadMore, retryLastPage} =
-    useSearchMoviesInfiniteQuery();
+  const {
+    query,
+    setQuery,
+    movies,
+    isLoading,
+    isFetching,
+    error,
+    loadMore,
+    retryLastPage,
+  } = useSearchMovies();
 
   return (
     <SearchMovie
