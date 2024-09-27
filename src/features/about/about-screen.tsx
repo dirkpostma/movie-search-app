@@ -1,11 +1,11 @@
 import React from 'react';
-import {Screen} from '../../core/ui/atoms/screen';
+import {MainTemplate} from '../../core/ui/templates/main-template';
 import {H1, H3, P} from '../../core/ui/atoms/typography';
 import {SafeAreaView} from 'react-native';
 
 export const AboutScreen = () => {
   return (
-    <Screen>
+    <MainTemplate>
       <SafeAreaView>
         <H1>About</H1>
         <P>Quickly search for movies using themoviedb.org API.</P>
@@ -25,6 +25,6 @@ export const AboutScreen = () => {
         </P>
         <P>Happy coding!</P>
       </SafeAreaView>
-    </Screen>
+    </MainTemplate>
   );
 };

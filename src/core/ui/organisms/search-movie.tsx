@@ -3,7 +3,6 @@ import {Movie} from '../../api/types';
 import {SearchMovieTextInput} from '../molecules/search-movie-text-input';
 import {SearchMovieResults} from '../molecules/search-movie-results';
 import {H3} from '../atoms/typography';
-import { Screen } from '../atoms/screen';
 
 type Props = {
   query: string;
@@ -29,7 +28,7 @@ export const SearchMovie = ({
   retry,
 }: Props) => {
   return (
-    <Screen>
+    <>
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
 
       {!query && <H3>Popular movies</H3>}
@@ -45,6 +44,6 @@ export const SearchMovie = ({
         onPressItem={onPressItem}
         retry={retry}
       />
-    </Screen>
+    </>
   );
 };

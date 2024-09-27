@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {useSearchMoviesInfiniteQuery} from '../use-search-movies-infinite-query';
-import {Screen} from '../../../core/ui/atoms/screen';
+import {MainTemplate} from '../../../core/ui/templates/main-template';
 import {H1} from '../../../core/ui/atoms/typography';
 import {Button, ScrollView, Text, View} from 'react-native';
 import {
@@ -30,7 +30,7 @@ export const UseSearchMoviesInfiniteQueryTestComponent = () => {
   } = useSearchMoviesInfiniteQuery();
 
   return (
-    <Screen>
+    <MainTemplate>
       <H1>Test Infinite Query Hook</H1>
       <SearchMovieTextInput onChange={e => setQuery(e.nativeEvent.text)} />
       <View>
@@ -68,6 +68,6 @@ export const UseSearchMoviesInfiniteQueryTestComponent = () => {
           <Text key={movie.id}>{movie.title}</Text>
         ))}
       </ScrollView>
-    </Screen>
+    </MainTemplate>
   );
 };
