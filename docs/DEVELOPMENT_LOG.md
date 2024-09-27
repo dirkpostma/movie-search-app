@@ -55,3 +55,7 @@ Race conditions with respect to infinite scroll and search are now solved differ
 ## Combined search & popular hooks
 
 After creating an inifite query hook for popular movies, I also create a hook that combines the search and popular queryies. This way, the results can be share on a single page. If query is empty, the movie list is populated with popular movies, otherwise, its populate with search results.
+
+## Scroll to top
+
+After running UI tests, it appeared that the FlashList start on top when query changed, resulting in list to start "half way", which can be confusing for user. To improve UX the movie list is now scrolled to top on each query change. This is implemented by exposing `scrollToTop` method to parent component.

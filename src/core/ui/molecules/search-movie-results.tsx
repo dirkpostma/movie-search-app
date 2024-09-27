@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {MovieList} from './movie-list';
 import {P} from '../atoms/typography';
 import {Movie} from '../../api/types';
@@ -24,6 +24,12 @@ export const SearchMovieResults = ({
   onPressItem,
   retry,
 }: Props) => {
+  const movieListRef = useRef<{scrollToTop: () => void}>(null);
+
+  useEffect(() => {
+    movieListRef.current?.scrollToTop();
+  }, [query]);
+
   if (isLoading) {
     return <P>Loading...</P>;
   }
@@ -34,6 +40,7 @@ export const SearchMovieResults = ({
 
   return (
     <MovieList
+      ref={movieListRef}
       movies={movies}
       isLoadingMore={isLoadingMore}
       onLoadMore={onLoadMore}

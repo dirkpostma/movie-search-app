@@ -1,5 +1,5 @@
 import {FlashList} from '@shopify/flash-list';
-import React from 'react';
+import React, {forwardRef, useImperativeHandle, useRef} from 'react';
 import {Movie} from '../../api/types';
 import {ListItem} from '../atoms/list-item';
 import {P} from '../atoms/typography';
@@ -16,47 +16,61 @@ type Props = {
   retry?: () => void;
 };
 
-export const MovieList = ({
-  movies,
-  isLoadingMore = false,
-  onLoadMore = () => {},
-  onPressItem,
-  error = false,
-  retry = () => {},
-}: Props) => {
-  return (
-    <FlashList
-      data={movies}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({item}) => (
-        <MovieListItem item={item} onPressItem={onPressItem} />
-      )}
-      estimatedItemSize={50}
-      onEndReached={onLoadMore}
-      onEndReachedThreshold={0.5}
-      ListFooterComponent={
-        isLoadingMore ? (
-          <ListItem onPressItem={retry}>
-            <ListItem.Content>
-              <View style={styles.card}>
-                <ActivityIndicator />
-              </View>
-            </ListItem.Content>
-          </ListItem>
-        ) : error ? (
-          <ListItem onPressItem={retry}>
-            <ListItem.Content>
-              <View style={styles.card}>
-                <P>Error while loading. Click here to retry...</P>
-              </View>
-            </ListItem.Content>
-          </ListItem>
-        ) : null
-      }
-      ItemSeparatorComponent={ListItem.Separator}
-    />
-  );
-};
+export const MovieList = forwardRef(
+  (
+    {
+      movies,
+      isLoadingMore = false,
+      onLoadMore = () => {},
+      onPressItem,
+      error = false,
+      retry = () => {},
+    }: Props,
+    ref,
+  ) => {
+    const listRef = useRef<FlashList<Movie>>(null);
+
+    useImperativeHandle(ref, () => ({
+      scrollToTop: () => {
+        listRef.current?.scrollToOffset({offset: 0, animated: true});
+      },
+    }));
+
+    return (
+      <FlashList
+        ref={listRef}
+        data={movies}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
+          <MovieListItem item={item} onPressItem={onPressItem} />
+        )}
+        estimatedItemSize={50}
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isLoadingMore ? (
+            <ListItem onPressItem={retry}>
+              <ListItem.Content>
+                <View style={styles.card}>
+                  <ActivityIndicator />
+                </View>
+              </ListItem.Content>
+            </ListItem>
+          ) : error ? (
+            <ListItem onPressItem={retry}>
+              <ListItem.Content>
+                <View style={styles.card}>
+                  <P>Error while loading. Click here to retry...</P>
+                </View>
+              </ListItem.Content>
+            </ListItem>
+          ) : null
+        }
+        ItemSeparatorComponent={ListItem.Separator}
+      />
+    );
+  },
+);
 
 // TODO: create atom for this
 const styles = StyleSheet.create({
