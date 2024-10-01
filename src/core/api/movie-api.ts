@@ -22,13 +22,6 @@ export const movieApi = createApi({
     getSearchMovies: builder.query<MovieListResponse, SearchMoviesQueryParams>({
       query: ({query, page}) =>
         `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
-    }),
-    getSearchMoviesV2: builder.query<
-      MovieListResponse,
-      SearchMoviesQueryParams
-    >({
-      query: ({query, page}) =>
-        `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
       serializeQueryArgs: ({endpointName, queryArgs}) => {
         return `${endpointName}-${queryArgs.query}`;
       },
@@ -58,8 +51,7 @@ export const movieApi = createApi({
 });
 
 export const {
-  useLazyGetSearchMoviesQuery,
+  useGetSearchMoviesQuery,
   useGetMovieByIdQuery,
   useLazyGetMoviePopularQuery,
-  useGetSearchMoviesV2Query,
 } = movieApi;

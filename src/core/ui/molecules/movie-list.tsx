@@ -28,7 +28,6 @@ export const MovieList = forwardRef(
     }: Props,
     ref,
   ) => {
-    console.log('REANDER MovieList..');
     const listRef = useRef<FlashList<Movie>>(null);
 
     useImperativeHandle(ref, () => ({
@@ -46,10 +45,7 @@ export const MovieList = forwardRef(
           <MovieListItem item={item} onPressItem={onPressItem} />
         )}
         estimatedItemSize={50}
-        onEndReached={() => {
-          console.log('enEndReached, calling onloadmore...');
-          onLoadMore();
-        }}
+        onEndReached={onLoadMore}
         onEndReachedThreshold={0.5}
         ListFooterComponent={
           isLoadingMore ? (

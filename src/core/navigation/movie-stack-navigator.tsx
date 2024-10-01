@@ -1,8 +1,7 @@
 import React from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-// import {SearchMovieScreen} from '../../features/search-movie/search-movie-screen';
-import { SearchMovieScreenV2 } from '../../features/search-movie-v2/search-movie-screen-v2';
+import {SearchMovieScreen} from '../../features/search-movie/search-movie-screen';
 import {MovieDetailsScreen} from '../../features/movie-details/movie-details-screen';
 
 export type MovieStackParamList = {
@@ -18,7 +17,7 @@ export const MovieStackNavigator = () => {
     <MovieStack.Navigator>
       <MovieStack.Screen
         name="SearchMovieScreen"
-        component={SearchMovieScreenV2}
+        component={SearchMovieScreen}
         options={{title: 'Search Movie'}}
       />
       <MovieStack.Screen
