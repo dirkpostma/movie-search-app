@@ -59,3 +59,13 @@ After creating an inifite query hook for popular movies, I also create a hook th
 ## Scroll to top
 
 After running UI tests, it appeared that the FlashList start on top when query changed, resulting in list to start "half way", which can be confusing for user. To improve UX the movie list is now scrolled to top on each query change. This is implemented by exposing `scrollToTop` method to parent component.
+
+## Use RTK Query's merge to implement infinite scroll
+
+RTK Query's [`createApi`](https://redux-toolkit.js.org/rtk-query/api/createApi#merge) offers methods that make it easier to implement infinite scroll:
+
+- `merge`: to manipulate the query cache
+- `serializeQueryArgs`: to define different caches, e.g. for each query
+- `forceRefetch`: to force a refetch, e.g. when page or query changes
+
+Created POC for it, but race conditions occurred, so not merged to main (yet).
