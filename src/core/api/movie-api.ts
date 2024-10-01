@@ -2,6 +2,7 @@ import {createApi} from '@reduxjs/toolkit/query/react';
 import {env} from '../../env';
 import {ListResponse, Movie} from './types';
 import {dynamicBaseQuery} from './base-query';
+import {sanitizeQuery} from '../utils/sanitize-query';
 
 type MovieListResponse = ListResponse<Movie>;
 
@@ -20,7 +21,10 @@ export const movieApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getSearchMovies: builder.query<MovieListResponse, SearchMoviesQueryParams>({
-      query: ({query, page}) => `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
+      query: ({query, page}) => {
+        const sanitizedQuery = sanitizeQuery(query);
+        return `/search/movie?api_key=${env.TMDB_API_KEY}&query=${sanitizedQuery}&page=${page}`;
+      },
     }),
     getMoviePopular: builder.query<MovieListResponse, MoviePopularQueryParams>({
       query: ({page}) =>
