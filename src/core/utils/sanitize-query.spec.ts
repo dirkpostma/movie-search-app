@@ -1,5 +1,4 @@
-// sanitizeQuery.test.ts
-import {sanitizeQuery} from './sanitizeQuery';
+import {sanitizeQuery} from './sanitize-query';
 
 describe('sanitizeQuery', () => {
   it('should trim leading and trailing spaces', () => {
