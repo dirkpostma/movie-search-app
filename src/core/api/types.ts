@@ -11,5 +11,4 @@ export type ListResponse<T> = {
   results: T[];
   total_pages: number;
   total_results: number;
-  query?: string;
 };

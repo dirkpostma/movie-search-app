@@ -20,7 +20,32 @@ export const movieApi = createApi({
   baseQuery: dynamicBaseQuery,
   endpoints: builder => ({
     getSearchMovies: builder.query<MovieListResponse, SearchMoviesQueryParams>({
-      query: ({query, page}) => `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
+      query: ({query, page}) =>
+        `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
+    }),
+    getSearchMoviesV2: builder.query<
+      MovieListResponse,
+      SearchMoviesQueryParams
+    >({
+      query: ({query, page}) =>
+        `/search/movie?api_key=${env.TMDB_API_KEY}&query=${query}&page=${page}`,
+      serializeQueryArgs: ({endpointName, queryArgs}) => {
+        return `${endpointName}-${queryArgs.query}`;
+      },
+      merge: (currentCache, newData) => {
+        currentCache.results = [
+          ...(currentCache.results || []),
+          ...newData.results,
+        ];
+        currentCache.page = newData.page;
+        currentCache.total_pages = newData.total_pages;
+      },
+      forceRefetch({currentArg, previousArg}) {
+        return (
+          currentArg?.query !== previousArg?.query ||
+          currentArg?.page !== previousArg?.page
+        );
+      },
     }),
     getMoviePopular: builder.query<MovieListResponse, MoviePopularQueryParams>({
       query: ({page}) =>
@@ -36,4 +61,5 @@ export const {
   useLazyGetSearchMoviesQuery,
   useGetMovieByIdQuery,
   useLazyGetMoviePopularQuery,
+  useGetSearchMoviesV2Query,
 } = movieApi;
