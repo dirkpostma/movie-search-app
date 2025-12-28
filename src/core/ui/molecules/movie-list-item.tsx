@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo, useCallback} from 'react';
 import {Movie} from '../../api/types';
 import {ListItem} from '../atoms/list-item';
 import {H3, P} from '../atoms/typography';
@@ -9,16 +9,28 @@ type Props = {
   onPressItem: (id: number) => void;
 };
 
-export const MovieListItem = ({item, onPressItem}: Props) => {
+export const MovieListItem = React.memo<Props>(({item, onPressItem}) => {
+  const imageUri = useMemo(
+    () => `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+    [item.poster_path],
+  );
+
+  const formattedDate = useMemo(
+    () => formatDate(item.release_date),
+    [item.release_date],
+  );
+
+  const handlePress = useCallback(() => {
+    onPressItem(item.id);
+  }, [item.id, onPressItem]);
+
   return (
-    <ListItem key={item.id} onPressItem={() => onPressItem(item.id)}>
-      <ListItem.Image
-        uri={`https://image.tmdb.org/t/p/w500/${item.poster_path}`}
-      />
+    <ListItem key={item.id} onPressItem={handlePress}>
+      <ListItem.Image uri={imageUri} />
       <ListItem.Content>
         <H3>{item.title}</H3>
-        <P>Released: {formatDate(item.release_date)}</P>
+        <P>Released: {formattedDate}</P>
       </ListItem.Content>
     </ListItem>
   );
-};
+});

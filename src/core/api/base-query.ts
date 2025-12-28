@@ -54,7 +54,9 @@ export const setDefaultFetchFunction = () => {
 };
 
 const mockBaseQuery: BaseQueryFn = async args => {
-  await new Promise(resolve => setTimeout(resolve, MOCK_API_DELAY_MS));
+  await new Promise<void>(resolve =>
+    setTimeout(() => resolve(), MOCK_API_DELAY_MS),
+  );
   let data;
 
   try {

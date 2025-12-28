@@ -1,5 +1,11 @@
 import {FlashList} from '@shopify/flash-list';
-import React, {forwardRef, useImperativeHandle, useRef} from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import {Movie} from '../../api/types';
 import {ListItem} from '../atoms/list-item';
 import {P} from '../atoms/typography';
@@ -16,39 +22,39 @@ type Props = {
   retry?: () => void;
 };
 
-export const MovieList = forwardRef(
-  (
-    {
-      movies,
-      isLoadingMore = false,
-      onLoadMore = () => {},
-      onPressItem,
-      error = false,
-      retry = () => {},
-    }: Props,
-    ref,
-  ) => {
-    const listRef = useRef<FlashList<Movie>>(null);
-
-    useImperativeHandle(ref, () => ({
-      scrollToTop: () => {
-        listRef.current?.scrollToOffset({offset: 0, animated: true});
+export const MovieList = React.memo(
+  forwardRef<{scrollToTop: () => void}, Props>(
+    (
+      {
+        movies,
+        isLoadingMore = false,
+        onLoadMore = () => {},
+        onPressItem,
+        error = false,
+        retry = () => {},
       },
-    }));
+      ref,
+    ) => {
+      const listRef = useRef<FlashList<Movie>>(null);
 
-    return (
-      <FlashList
-        ref={listRef}
-        data={movies}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
+      useImperativeHandle(ref, () => ({
+        scrollToTop: () => {
+          listRef.current?.scrollToOffset({offset: 0, animated: true});
+        },
+      }));
+
+      const keyExtractor = useCallback((item: Movie) => item.id.toString(), []);
+
+      const renderItem = useCallback(
+        ({item}: {item: Movie}) => (
           <MovieListItem item={item} onPressItem={onPressItem} />
-        )}
-        estimatedItemSize={50}
-        onEndReached={onLoadMore}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          isLoadingMore ? (
+        ),
+        [onPressItem],
+      );
+
+      const footerComponent = useMemo(() => {
+        if (isLoadingMore) {
+          return (
             <ListItem onPressItem={retry}>
               <ListItem.Content>
                 <View style={styles.card}>
@@ -56,7 +62,10 @@ export const MovieList = forwardRef(
                 </View>
               </ListItem.Content>
             </ListItem>
-          ) : error ? (
+          );
+        }
+        if (error) {
+          return (
             <ListItem onPressItem={retry}>
               <ListItem.Content>
                 <View style={styles.card}>
@@ -64,12 +73,26 @@ export const MovieList = forwardRef(
                 </View>
               </ListItem.Content>
             </ListItem>
-          ) : null
+          );
         }
-        ItemSeparatorComponent={ListItem.Separator}
-      />
-    );
-  },
+        return null;
+      }, [isLoadingMore, error, retry]);
+
+      return (
+        <FlashList
+          ref={listRef}
+          data={movies}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
+          estimatedItemSize={50}
+          onEndReached={onLoadMore}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={footerComponent}
+          ItemSeparatorComponent={ListItem.Separator}
+        />
+      );
+    },
+  ),
 );
 
 // TODO: create atom for this

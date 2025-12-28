@@ -57,7 +57,7 @@ describe('SearchMovieScreen', () => {
     // Prevent warning: ReferenceError: You are trying to access a property
     // or method of the Jest environment after it has been torn down.
     unmount();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   });
 
   it('should only show inception if user searches for `inc`', async () => {
@@ -80,7 +80,7 @@ describe('SearchMovieScreen', () => {
     expect(queryByText('The Matrix')).toBeNull();
 
     unmount();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   });
   it('should show `no movies found` when users searches for `qwerasdf`', async () => {
     const {findByPlaceholderText, findByText, queryByText, unmount} = render(
@@ -98,7 +98,7 @@ describe('SearchMovieScreen', () => {
     });
 
     unmount();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   });
 
   it('should show error message when 500 response is received', async () => {
@@ -116,11 +116,13 @@ describe('SearchMovieScreen', () => {
     fireEvent(textField, 'change', {nativeEvent: {text: 'inc'}});
 
     await waitFor(async () => {
-      const movieItem = await findByText('Error while loading. Click here to retry...');
+      const movieItem = await findByText(
+        'Error while loading. Click here to retry...',
+      );
       expect(movieItem).toBeDefined();
     });
 
     unmount();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 500));
   });
 });

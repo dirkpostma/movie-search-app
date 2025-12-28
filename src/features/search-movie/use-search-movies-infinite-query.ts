@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback, useRef} from 'react';
+import {useState, useEffect, useCallback, useRef, useMemo} from 'react';
 import {useLazyGetSearchMoviesQuery} from '../../core/api/movie-api';
 import {Movie} from '../../core/api/types';
 
@@ -96,7 +96,7 @@ export function useSearchMoviesInfiniteQuery() {
     }
   }, [isFetching, query, state.page, fetchPage]);
 
-  const movies = state.pages.flat();
+  const movies = useMemo(() => state.pages.flat(), [state.pages]);
 
   return {
     query,

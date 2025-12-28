@@ -31,7 +31,7 @@ export const handlers = [
       query = searchParams.get('query') || '';
     }
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 100));
 
     const response = buildResponse(query);
 

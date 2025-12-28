@@ -1,31 +1,32 @@
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
-import { spacing } from './spacing';
+import {Text, StyleSheet, TextProps, StyleProp, TextStyle} from 'react-native';
+import {spacing} from './spacing';
 
 type Props = {
   children: React.ReactNode;
-};
+  style?: StyleProp<TextStyle>;
+} & TextProps;
 
-export const H1 = ({children, ...props}: Props) => (
-  <Text style={styles.h1} {...props}>
+export const H1 = ({children, style, ...props}: Props) => (
+  <Text style={[styles.h1, style]} {...props}>
     {children}
   </Text>
 );
 
-export const H2 = ({children, ...props}: Props) => (
-  <Text style={styles.h2} {...props}>
+export const H2 = ({children, style, ...props}: Props) => (
+  <Text style={[styles.h2, style]} {...props}>
     {children}
   </Text>
 );
 
-export const H3 = ({children, ...props}: Props) => (
-  <Text style={styles.h3} {...props}>
+export const H3 = ({children, style, ...props}: Props) => (
+  <Text style={[styles.h3, style]} {...props}>
     {children}
   </Text>
 );
 
-export const P = ({children, ...props}: Props) => (
-  <Text style={styles.paragraph} {...props}>
+export const P = ({children, style, ...props}: Props) => (
+  <Text style={[styles.paragraph, style]} {...props}>
     {children}
   </Text>
 );
